@@ -47,9 +47,6 @@ def get_argmin_distr(data_path):
     y_baseline = data[:, 1]
     y = data[:, 0]
     
-    X = np.array([experiment - np.max(experiment) for experiment in X])
-    X = np.array([experiment/-np.min(experiment) for experiment in X])
-    
     return np.argmin(X, axis=1)
    
 def get_freq_data(X, freq=1, start_point=340):
