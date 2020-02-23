@@ -6,8 +6,13 @@ from sklearn.model_selection import cross_validate
 import matplotlib.pyplot as plt
 import random
 
+<<<<<<< HEAD
 def get_data(is_one_signal=False):
     file = open('./data/shashlik_61_pulses.txt', 'r')
+=======
+def get_data(data_path, is_one_signal=False):
+    file = open(data_path, 'r')
+>>>>>>> e4dcd5c0b4b6e0d33a5d5dfd4c0fa7cb64088575
     data = file.readlines()
     data = np.array([list(map(float, experiment.split())) for experiment in data])
    
@@ -25,12 +30,41 @@ def get_data(is_one_signal=False):
         mean_ref_time = int(y.mean())
         X = np.array([signal_cyclic_shift(signal, mean_ref_time - y[i]) for i, signal in enumerate(X, 0)])
         y = np.array([mean_ref_time]*len(X))
+<<<<<<< HEAD
 
     return X, y
 
 def get_argmin_distr():
     X_one_signal, _ = get_data(is_one_signal=True)
     return np.argmin(X_one_signal, axis=1)
+=======
+#     else:
+#         X_new = []
+#         y_new = []
+        
+#         ARGMIN_DISTR = get_argmin_distr()
+#         for i in range(len(X)):
+#             new_pos = random.choice(ARGMIN_DISTR)
+#             X_new.append(signal_cyclic_shift(X[i], new_pos - np.argmin(X[i])))
+#             y_new.append(y[i] + new_pos - np.argmin(X[i]))
+#         X = np.array(X_new)
+#         y = np.array(y_new)
+    return X, y
+
+def get_argmin_distr(data_path):
+    file = open(data_path, 'r')
+    data = file.readlines()
+    data = np.array([list(map(float, experiment.split())) for experiment in data])
+   
+    X = data[:, 2:]
+    y_baseline = data[:, 1]
+    y = data[:, 0]
+    
+    X = np.array([experiment - np.max(experiment) for experiment in X])
+    X = np.array([experiment/-np.min(experiment) for experiment in X])
+    
+    return np.argmin(X, axis=1)
+>>>>>>> e4dcd5c0b4b6e0d33a5d5dfd4c0fa7cb64088575
     
 def get_freq_data(X, freq=1, start_point=384):
     X_freq = np.concatenate([X[:, start_point::-freq][:, ::-1], X[:, start_point + freq::freq]], axis=1)
@@ -49,9 +83,15 @@ def get_ref_time(first_impulse, second_impulse, first_ref_time, second_ref_time)
     else:
         return second_ref_time
 
+<<<<<<< HEAD
 ARGMIN_DISTR = get_argmin_distr()
     
 def generate_multi_signal(X_origin, y_origin, tau, alpha, to_plot=False):
+=======
+# ARGMIN_DISTR = get_argmin_distr()
+  
+def generate_multi_signal(X_origin, y_origin, tau, alpha, argmin_distr, to_plot=False):
+>>>>>>> e4dcd5c0b4b6e0d33a5d5dfd4c0fa7cb64088575
     first_idx, second_idx = np.random.choice(X_origin.shape[0], 2, replace=False)
     first_impulse = X_origin[first_idx]
     second_impulse = X_origin[second_idx]
@@ -66,7 +106,11 @@ def generate_multi_signal(X_origin, y_origin, tau, alpha, to_plot=False):
     multi_impulse /= -np.min(multi_impulse)
     
     mean_argmin = int(np.mean(np.argmin(X_origin, axis=1)))
+<<<<<<< HEAD
     new_pos = random.choice(ARGMIN_DISTR)
+=======
+    new_pos = random.choice(argmin_distr)
+>>>>>>> e4dcd5c0b4b6e0d33a5d5dfd4c0fa7cb64088575
     
     first_impulse_shifted = signal_cyclic_shift(first_impulse, new_pos - np.argmin(first_impulse))
     second_impulse_shifted = signal_cyclic_shift(second_impulse, new_pos - np.argmin(second_impulse))
